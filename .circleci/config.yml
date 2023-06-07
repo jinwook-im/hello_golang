@@ -30,7 +30,11 @@ jobs:
           command: go test -v
       - store_test_results:
           path: /tmp/test-reports
-
+  test:
+    docker:
+      - image: circleci/golang:1.15.8
+    steps:
+      - checkout
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
@@ -44,6 +48,6 @@ workflows:
             - build
       # On approval of the `hold` job, any successive job that requires the `hold` job will run.
       # In this case, a user is manually triggering the deploy job.
-      - deploy:
+      - test:
           requires:
             - hold
